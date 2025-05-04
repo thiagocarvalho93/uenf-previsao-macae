@@ -39,6 +39,19 @@
         />
       </q-fab>
     </q-page-sticky>
+
+    <q-page-sticky position="bottom-left" :offset="[30, 30]">
+      <q-fab hide-icon label="Grid" direction="up" color="primary">
+        <q-fab-action
+          v-for="item in GRIDS"
+          :key="item"
+          @click="handleChangeGrid(item)"
+          color="accent"
+          hide-icon
+          :label="item"
+        />
+      </q-fab>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -76,6 +89,10 @@ const previousDisabled = computed(() => hourIndex.value === 0 && dateIndex.value
 const nextDisabled = computed(
   () => hourIndex.value === hours.value.length - 1 && dateIndex.value === dates.value.length - 1,
 )
+
+function handleChangeGrid(item) {
+  selectedGrid.value = item
+}
 
 function handleChangeVariable(item) {
   if (item == 'Radiacao') {
