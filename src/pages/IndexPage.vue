@@ -76,7 +76,7 @@ function handlePrevious() {
 
   if (hourIndex.value === 0) {
     runHour.value = HOURS[HOURS.length - 1]
-    selectedDate.value = dates[dateIndex.value - 1]
+    selectedDate.value = dates.value[dateIndex.value - 1]
   } else {
     runHour.value = HOURS[hourIndex.value - 1]
   }
