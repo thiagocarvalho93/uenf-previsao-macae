@@ -18,7 +18,7 @@
           <q-select v-model="selectedDate" :options="dates" label="Data" />
         </div>
         <div class="">
-          <q-select v-model="runHour" :options="hours" label="Hora" />
+          <q-select v-model="runHour" :options="HOURS" label="Hora" />
         </div>
         <div class="">
           <q-icon
@@ -37,73 +37,76 @@
 </template>
 
 <script setup>
-import { BUCKET_URL, FILE_PREFIX_MAP } from 'src/constants/constants'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { HOURS, VARIABLES } from 'src/constants/constants'
+import { getImageUrl } from 'src/helpers/url-helper'
+import { api } from 'src/boot/axios'
+import { formatDateNumbersOnly, generateDatesArray } from 'src/helpers/date-helper'
 
-const variable = ref('Temperatura')
-const selectedDate = ref('2025-05-03')
-const runHour = ref('00Z')
+// Reactive state
+const variable = ref(VARIABLES[0])
+const selectedDate = ref('')
+const runHour = ref(HOURS[0])
+const dates = ref([])
 
-// const variables = ['Temperatura', 'Vento', 'Pressao', 'Precipitacao', 'Radiacao']
-const dates = ['2025-05-03', '2025-05-04', '2025-05-05']
-const hours = ['00Z', '03Z', '06Z', '09Z', '12Z', '15Z', '18Z', '21Z']
+// Computed indices
+const hourIndex = computed(() => HOURS.indexOf(runHour.value))
+const dateIndex = computed(() => dates.value.indexOf(selectedDate.value))
 
-const imageUrl = computed(
-  () =>
-    `${BUCKET_URL}/${variable.value}/${FILE_PREFIX_MAP.get(variable.value)}_g1_${selectedDate.value.replaceAll('-', '')}_${runHour.value}.png`,
+// Image URL builder
+const imageUrl = computed(() =>
+  getImageUrl(variable.value, formatDateNumbersOnly(selectedDate.value), runHour.value),
 )
 
-const hourIndex = computed(() => hours.findIndex((x) => x == runHour.value))
-const dateIndex = computed(() => dates.findIndex((x) => x == selectedDate.value))
-
-const previousDisabled = computed(() => hourIndex.value == 0 && dateIndex.value == 0)
+// Navigation state
+const previousDisabled = computed(() => hourIndex.value === 0 && dateIndex.value === 0)
 const nextDisabled = computed(
-  () => hourIndex.value + 1 >= hours.length && dateIndex.value + 1 >= dates.length,
+  () => hourIndex.value === HOURS.length - 1 && dateIndex.value === dates.value.length - 1,
 )
 
+// Swipe handler
 function handleSwipe(e) {
-  console.log('swiped')
-
-  if (e.direction == 'left') {
-    handleNext()
-  }
-
-  if (e.direction == 'right') {
-    handlePrevious()
-  }
+  if (e.direction === 'left') handleNext()
+  else if (e.direction === 'right') handlePrevious()
 }
 
+// Navigation logic
 function handlePrevious() {
   if (previousDisabled.value) return
 
-  const isFirstHour = hourIndex.value == 0
-  const isFirstDay = dateIndex.value == 0
-
-  if (isFirstHour) {
-    const nextHourIndex = isFirstDay ? hourIndex : hours.length - 1
-    const nextDateIndex = isFirstDay ? dateIndex : dateIndex.value - 1
-
-    runHour.value = hours[nextHourIndex]
-    selectedDate.value = dates[nextDateIndex]
+  if (hourIndex.value === 0) {
+    runHour.value = HOURS[HOURS.length - 1]
+    selectedDate.value = dates[dateIndex.value - 1]
   } else {
-    runHour.value = hours[hourIndex.value - 1]
+    runHour.value = HOURS[hourIndex.value - 1]
   }
 }
 
 function handleNext() {
   if (nextDisabled.value) return
-  const isLastHour = hourIndex.value + 1 >= hours.length
-  const isLastDate = dateIndex.value + 1 >= dates.length
 
-  if (isLastHour) {
-    const nextHourIndex = isLastDate ? hourIndex.value : 0
-    const nextDateIndex = isLastDate ? dateIndex.value : dateIndex.value + 1
-    runHour.value = hours[nextHourIndex]
-    selectedDate.value = dates[nextDateIndex]
+  if (hourIndex.value === HOURS.length - 1) {
+    runHour.value = HOURS[0]
+    selectedDate.value = dates.value[dateIndex.value + 1]
   } else {
-    runHour.value = hours[hourIndex.value + 1]
+    runHour.value = HOURS[hourIndex.value + 1]
   }
 }
-</script>
 
-<style></style>
+onMounted(async () => {
+  try {
+    const { data } = await api.get('last_updated.json')
+
+    const text = (await data).trim()
+
+    const [day, month, year] = text.split('-').map(Number)
+    const baseDate = new Date(year, month - 1, day)
+
+    dates.value = generateDatesArray(baseDate)
+
+    selectedDate.value = dates.value[0]
+  } catch (err) {
+    console.error('Failed to load last_updated.json:', err)
+  }
+})
+</script>
