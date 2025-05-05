@@ -1,5 +1,6 @@
 <template>
   <q-page class="q-pa-md">
+    <span>Último update: {{ lastUpdate }}</span>
     <q-card flat bordered class="q-pa-sm">
       <!-- <div class="row q-row-gutter-md flex-center q-mb-md">
         <div v-for="item in GRIDS" :key="item">
@@ -24,7 +25,7 @@
           size="xl"
         />
       </div>
-      <q-img v-touch-swipe.mouse="handleSwipe" :src="imageUrl" alt="Previsão" />
+      <q-img no-transition v-touch-swipe.mouse="handleSwipe" :src="imageUrl" alt="Previsão" />
     </q-card>
 
     <q-page-sticky position="bottom-right" :offset="[30, 30]">
@@ -33,7 +34,7 @@
           v-for="item in VARIABLES"
           :key="item"
           @click="handleChangeVariable(item)"
-          color="accent"
+          color="blue"
           hide-icon
           :label="item"
         />
@@ -46,7 +47,7 @@
           v-for="item in GRIDS"
           :key="item"
           @click="handleChangeGrid(item)"
-          color="accent"
+          color="blue"
           hide-icon
           :label="item"
         />
@@ -66,9 +67,10 @@ import { formatDateNumbersOnly, generateDatesArray } from 'src/helpers/date-help
 const selectedVariable = ref(VARIABLES[0])
 const selectedDate = ref('')
 const selectedHour = ref(HOURS[0])
-const selectedGrid = ref(GRIDS[0])
+const selectedGrid = ref(GRIDS[2])
 const dates = ref([])
 const hours = ref(HOURS)
+const lastUpdate = ref('')
 
 // Computed indices
 const hourIndex = computed(() => hours.value.indexOf(selectedHour.value))
@@ -140,6 +142,7 @@ onMounted(async () => {
     const { data } = await api.get('last_updated.json')
 
     const text = (await data).trim()
+    lastUpdate.value = text
 
     const [day, month, year] = text.split('-').map(Number)
     const baseDate = new Date(year, month - 1, day)
