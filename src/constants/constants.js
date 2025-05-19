@@ -12,4 +12,26 @@ export const FILE_PREFIX_MAP = new Map([
   ['Radiacao', 'solar'],
   ['Pressao', 'slp'],
 ])
-export const VARIABLES = [...FILE_PREFIX_MAP.keys()]
+// export const VARIABLES = [...FILE_PREFIX_MAP.keys()]
+export const VARIABLES = {
+  TEMPERATURE: {
+    TEXT: 'Temperatura',
+    PREFIX: 'temp',
+    ICON: 'thermostat',
+  },
+  PRECIPITATION: {
+    TEXT: 'Precipitacao',
+    PREFIX: 'prec',
+    ICON: 'water_drop',
+  },
+  SOLAR: {
+    TEXT: 'Radiacao',
+    PREFIX: 'solar',
+    ICON: 'wb_sunny',
+  },
+  PRESSURE: {
+    TEXT: 'Pressao',
+    PREFIX: 'slp',
+    ICON: 'compress',
+  },
+}

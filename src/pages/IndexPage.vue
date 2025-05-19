@@ -7,6 +7,18 @@
           <q-radio size="sm" v-model="selectedGrid" :val="item" :label="item" />
         </div>
       </div> -->
+      <div class="q-pa-md">
+        <q-btn-group outline unelevated flat spread>
+          <q-btn
+            v-for="item in VARIABLES"
+            :key="item"
+            color="blue"
+            outline
+            :icon="item.ICON"
+            @click="handleChangeVariable(item)"
+          />
+        </q-btn-group>
+      </div>
       <div class="row q-col-gutter-md flex-center q-mb-sm">
         <q-icon
           @click="handlePrevious"
@@ -25,10 +37,11 @@
           size="xl"
         />
       </div>
+
       <q-img no-transition v-touch-swipe.mouse="handleSwipe" :src="imageUrl" alt="Previsão" />
     </q-card>
 
-    <q-page-sticky position="bottom-right" :offset="[30, 30]">
+    <!-- <q-page-sticky position="bottom-right" :offset="[30, 30]">
       <q-fab hide-icon label="Variável" direction="up" color="primary">
         <q-fab-action
           v-for="item in VARIABLES"
@@ -39,7 +52,7 @@
           :label="item"
         />
       </q-fab>
-    </q-page-sticky>
+    </q-page-sticky> -->
 
     <!-- <q-page-sticky position="bottom-left" :offset="[30, 30]">
       <q-fab hide-icon label="Grid" direction="up" color="primary">
@@ -64,7 +77,7 @@ import { api } from 'src/boot/axios'
 import { formatDateNumbersOnly, generateDatesArray } from 'src/helpers/date-helper'
 
 // Reactive state
-const selectedVariable = ref(VARIABLES[0])
+const selectedVariable = ref(VARIABLES.TEMPERATURE)
 const selectedDate = ref('')
 const selectedHour = ref(HOURS[0])
 const selectedGrid = ref(GRIDS[1])
@@ -97,7 +110,7 @@ const nextDisabled = computed(
 // }
 
 function handleChangeVariable(item) {
-  if (item == 'Radiacao') {
+  if (item.TEXT == 'Radiacao') {
     hours.value = HOURS_RADIATION
     selectedHour.value = HOURS_RADIATION.includes(selectedHour.value)
       ? selectedHour.value
