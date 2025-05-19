@@ -3,7 +3,7 @@
     <q-header bordered>
       <q-toolbar>
         <q-toolbar-title> Previsão Macaé </q-toolbar-title>
-        <q-btn flat round icon="dark_mode" @click="toggleDark" />
+        <!-- <q-btn flat round icon="dark_mode" @click="toggleDark" /> -->
       </q-toolbar>
     </q-header>
 
@@ -14,10 +14,10 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
-const $q = useQuasar()
+// import { useQuasar } from 'quasar'
+// const $q = useQuasar()
 
-function toggleDark() {
-  $q.dark.set(!$q.dark.isActive)
-}
+// function toggleDark() {
+//   $q.dark.set(!$q.dark.isActive)
+// }
 </script>
