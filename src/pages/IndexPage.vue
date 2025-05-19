@@ -71,7 +71,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { GRIDS, HOURS, HOURS_RADIATION, VARIABLES } from 'src/constants/constants'
+import {
+  GRIDS,
+  HOURS,
+  HOURS_PRECIPITATION,
+  HOURS_RADIATION,
+  VARIABLES,
+} from 'src/constants/constants'
 import { getImageUrl } from 'src/helpers/url-helper'
 import { api } from 'src/boot/axios'
 import { formatDateNumbersOnly, generateDatesArray } from 'src/helpers/date-helper'
@@ -110,11 +116,16 @@ const nextDisabled = computed(
 // }
 
 function handleChangeVariable(item) {
-  if (item.TEXT == 'Radiacao') {
+  if (item.TEXT == VARIABLES.SOLAR.TEXT) {
     hours.value = HOURS_RADIATION
     selectedHour.value = HOURS_RADIATION.includes(selectedHour.value)
       ? selectedHour.value
       : HOURS_RADIATION[0]
+  } else if (item.TEXT == VARIABLES.PRECIPITATION.TEXT) {
+    hours.value = HOURS_PRECIPITATION
+    selectedHour.value = HOURS_PRECIPITATION.includes(selectedHour.value)
+      ? selectedHour.value
+      : HOURS_PRECIPITATION[0]
   } else {
     hours.value = HOURS
   }

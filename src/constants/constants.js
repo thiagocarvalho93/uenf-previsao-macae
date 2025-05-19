@@ -3,6 +3,7 @@ export const BUCKET_URL =
 
 export const HOURS = ['00Z', '03Z', '06Z', '09Z', '12Z', '15Z', '18Z', '21Z']
 export const HOURS_RADIATION = ['12Z', '15Z', '18Z']
+export const HOURS_PRECIPITATION = ['03Z', '06Z', '09Z', '12Z', '15Z', '18Z', '21Z']
 export const GRIDS = ['g1', 'g2', 'g3']
 
 // variaveis
