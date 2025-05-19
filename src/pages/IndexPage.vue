@@ -41,7 +41,7 @@
       </q-fab>
     </q-page-sticky>
 
-    <q-page-sticky position="bottom-left" :offset="[30, 30]">
+    <!-- <q-page-sticky position="bottom-left" :offset="[30, 30]">
       <q-fab hide-icon label="Grid" direction="up" color="primary">
         <q-fab-action
           v-for="item in GRIDS"
@@ -52,7 +52,7 @@
           :label="item"
         />
       </q-fab>
-    </q-page-sticky>
+    </q-page-sticky> -->
   </q-page>
 </template>
 
@@ -67,7 +67,7 @@ import { formatDateNumbersOnly, generateDatesArray } from 'src/helpers/date-help
 const selectedVariable = ref(VARIABLES[0])
 const selectedDate = ref('')
 const selectedHour = ref(HOURS[0])
-const selectedGrid = ref(GRIDS[2])
+const selectedGrid = ref(GRIDS[1])
 const dates = ref([])
 const hours = ref(HOURS)
 const lastUpdate = ref('')
@@ -92,9 +92,9 @@ const nextDisabled = computed(
   () => hourIndex.value === hours.value.length - 1 && dateIndex.value === dates.value.length - 1,
 )
 
-function handleChangeGrid(item) {
-  selectedGrid.value = item
-}
+// function handleChangeGrid(item) {
+//   selectedGrid.value = item
+// }
 
 function handleChangeVariable(item) {
   if (item == 'Radiacao') {
