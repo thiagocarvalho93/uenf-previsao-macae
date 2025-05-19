@@ -2,11 +2,6 @@
   <q-page class="q-pa-md">
     <span>Último update: {{ lastUpdate }}</span>
     <q-card flat bordered class="q-pa-sm">
-      <!-- <div class="row q-row-gutter-md flex-center q-mb-md">
-        <div v-for="item in GRIDS" :key="item">
-          <q-radio size="sm" v-model="selectedGrid" :val="item" :label="item" />
-        </div>
-      </div> -->
       <div class="flex-center row q-pa-md">
         <q-btn-group outline flex-center rounded unelevated flat>
           <q-btn
@@ -40,32 +35,6 @@
 
       <q-img no-transition v-touch-swipe.mouse="handleSwipe" :src="imageUrl" alt="Previsão" />
     </q-card>
-
-    <!-- <q-page-sticky position="bottom-right" :offset="[30, 30]">
-      <q-fab hide-icon label="Variável" direction="up" color="primary">
-        <q-fab-action
-          v-for="item in VARIABLES"
-          :key="item"
-          @click="handleChangeVariable(item)"
-          color="blue"
-          hide-icon
-          :label="item"
-        />
-      </q-fab>
-    </q-page-sticky> -->
-
-    <!-- <q-page-sticky position="bottom-left" :offset="[30, 30]">
-      <q-fab hide-icon label="Grid" direction="up" color="primary">
-        <q-fab-action
-          v-for="item in GRIDS"
-          :key="item"
-          @click="handleChangeGrid(item)"
-          color="blue"
-          hide-icon
-          :label="item"
-        />
-      </q-fab>
-    </q-page-sticky> -->
   </q-page>
 </template>
 
@@ -111,17 +80,14 @@ const nextDisabled = computed(
   () => hourIndex.value === hours.value.length - 1 && dateIndex.value === dates.value.length - 1,
 )
 
-// function handleChangeGrid(item) {
-//   selectedGrid.value = item
-// }
-
 function handleChangeVariable(item) {
   if (item.TEXT == VARIABLES.SOLAR.TEXT) {
     hours.value = HOURS_RADIATION
     selectedHour.value = HOURS_RADIATION.includes(selectedHour.value)
       ? selectedHour.value
       : HOURS_RADIATION[0]
-  } else if (item.TEXT == VARIABLES.PRECIPITATION.TEXT) {
+    // TODO melhorar lógica
+  } else if (item.TEXT == VARIABLES.PRECIPITATION.TEXT && selectedDate.value == dates.value[0]) {
     hours.value = HOURS_PRECIPITATION
     selectedHour.value = HOURS_PRECIPITATION.includes(selectedHour.value)
       ? selectedHour.value
