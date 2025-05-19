@@ -7,13 +7,13 @@
           <q-radio size="sm" v-model="selectedGrid" :val="item" :label="item" />
         </div>
       </div> -->
-      <div class="q-pa-md">
-        <q-btn-group outline unelevated flat spread>
+      <div class="flex-center row q-pa-md">
+        <q-btn-group outline flex-center rounded unelevated flat>
           <q-btn
             v-for="item in VARIABLES"
             :key="item"
             color="blue"
-            outline
+            :outline="item.TEXT != selectedVariable.TEXT"
             :icon="item.ICON"
             @click="handleChangeVariable(item)"
           />
